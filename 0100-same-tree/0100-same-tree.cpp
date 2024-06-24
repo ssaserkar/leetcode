@@ -12,30 +12,26 @@
 class Solution {
 public:
     bool isSameTree(TreeNode* p, TreeNode* q) {
-        std::queue<TreeNode*> queue;
-        queue.push(p);
-        queue.push(q);
+        // Base case: Check if both trees are empty (null)
+        //if p is null and q is null:
+        //return true
+        bool leftcheck = false, rightcheck = false;
+        if(p== NULL && q== NULL) return true;
+    
+        // Base case: Check if one tree is empty while the other is not
+        // if p is null or q is null:
+        //    return false
+        if(p == NULL || q == NULL) return false;
+        // Check if current nodes of both trees have the same value
+        // if p.val is not equal to q.val:
+        //    return false
+        if(p->val != q->val) return false;
+        // Recursively check left and right subtrees
+        //leftSame := isSameTree(p.left, q.left)
+        //rightSame := isSameTree(p.right, q.right)
+        leftcheck = isSameTree(p->left, q->left);
+        rightcheck = isSameTree(p->right, q->right);
         
-        while (!queue.empty()) {
-            TreeNode* nodeP = queue.front();
-            queue.pop();
-            TreeNode* nodeQ = queue.front();
-            queue.pop();
-            
-            if (nodeP == nullptr && nodeQ == nullptr) {
-                continue;
-            }
-            
-            if (nodeP == nullptr || nodeQ == nullptr || nodeP->val != nodeQ->val) {
-                return false;
-            }
-            
-            queue.push(nodeP->left);
-            queue.push(nodeQ->left);
-            queue.push(nodeP->right);
-            queue.push(nodeQ->right);
-        }
-        
-        return true;
+        return (leftcheck && rightcheck);
     }
 };
