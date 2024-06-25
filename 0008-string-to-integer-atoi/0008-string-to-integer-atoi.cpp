@@ -1,35 +1,34 @@
 class Solution {
 public:
     int myAtoi(string s) {
-         int i = 0;
+        int i = 0;
         int n = s.length();
-        int positive = 1; // flag for positive/negative sign
-        long long res = 0; // long long to handle potential overflow before converting to int
+        int sign = 1; // Default positive
+        long long res = 0; // Use long long for potential overflow handling
 
         // Skip leading whitespace
-        while (i < n && std::isspace(s[i])) {
+        while (i < n && s[i] == ' ') {
             i++;
         }
 
         // Check sign
         if (i < n && (s[i] == '+' || s[i] == '-')) {
-            positive = (s[i] == '+') ? 1 : -1;
-            i++;
+            sign = (s[i++] == '+') ? 1 : -1;
         }
 
-        // Read numeric characters
+        // Accumulate numeric characters
         while (i < n && std::isdigit(s[i])) {
-            res = res * 10 + (s[i] - '0');
+            res = res * 10 + (s[i++] - '0');
             
-            // Check for overflow
-            if (res > std::numeric_limits<int>::max()) {
-                return (positive == 1) ? std::numeric_limits<int>::max() : std::numeric_limits<int>::min();
+            // Early termination on overflow
+            if (res * sign > std::numeric_limits<int>::max()) {
+                return std::numeric_limits<int>::max();
             }
-            
-            i++;
+            if (res * sign < std::numeric_limits<int>::min()) {
+                return std::numeric_limits<int>::min();
+            }
         }
 
-        // Apply sign and return result
-        return positive * res;
+        return static_cast<int>(res * sign);
     }
 };
